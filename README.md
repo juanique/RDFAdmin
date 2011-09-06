@@ -1,5 +1,5 @@
 
-# RDFClip
+# RDFAdmin
 
 ## Getting started
 
@@ -8,7 +8,7 @@
 
 2. Get the code
 
-    git clone https://github.com/juanique99/RDFClip.git
+    git clone https://github.com/user99/RDFAdmin.git
 
 3. Copy +local_settings.py.example+ to +local_settings.py+ and edit it
    according to your local config.
@@ -37,6 +37,7 @@
 2. Install Django pistons
 
     wget http://bitbucket.org/jespern/django-piston/downloads/django-piston-0.2.2.tar.gz
+    tar -xvzf django-piston-0.2.2.tar.gz
     cd django-piston
     sudo python setup.py install
 
@@ -45,11 +46,52 @@
    This packages are in current Debian/Ubuntu distributions so you can
    install them using the package manager.
    
-    sudo apt-get install python-beatifulsoup
-    sudo apt-get install python-mechanize
+    sudo apt-get install python-beautifulsoup python-mechanize php5-curl
+
+4. To doc
+
+    sudo apt-get install virtuoso-opensource-6.1
+    sudo apt-get install php5-curl
 
 ### Database setup
 
-RDFClip uses a relational database to (TODO: specify why).
+RDFAdmin uses a relational database to (TODO: specify why).
+
+### Apache configuration example (mod-python)
+
+    <VirtualHost *>
+        ServerName www.rdfclip.com
+
+        SetHandler python-program
+        PythonHandler django.core.handlers.modpython
+        SetEnv DJANGO_SETTINGS_MODULE settings
+        SetEnv DJANGO_SERVER_TYPE apache
+        PythonPath "['/home/rdfclip','/home/rdfclip_git'] + sys.path"
+    </VirtualHost>
 
     
+### mod-wsgi
+sudo apt-get install libapache2-mod-wsgi
+
+<VirtualHost *>
+    ServerName www.rdfclip.com
+    WSGIScriptAlias / /home/user/RDFAdmin/django.wsgi
+
+    <Directory /home/user/RDFclip>
+		Order allow,deny
+		allow from all
+    </Directory>
+
+    Alias /sparqlproxy/ "/home/user/RDFAdmin/proxy/"
+    <Directory "/home/user/RDFAdmin/proxy/">
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+</VirtualHost>
+
+
+### Virtuoso
+sudo apt-get install virtuoso-opensource 
+
+Edit /etc/virtuoso-opensource-6.0/virtuoso.ini and add the settings.VIRTUOSO_WORK_DIR to the DirsAllowed variable
