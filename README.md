@@ -8,12 +8,17 @@
 
 2. Get the code
 
-    git clone https://github.com/user99/RDFAdmin.git
+    git clone https://github.com/juanique99/RDFAdmin.git
 
 3. Copy +local_settings.py.example+ to +local_settings.py+ and edit it
-   according to your local config.
+   according to your local config. In particular, make sure to set your 
+   Virtuoso access variables.
 
-4. Run with
+4. Create the support DB
+    
+    python manage.py syncdb
+
+5. Run with
 
     python manage.py runserver
 
@@ -23,6 +28,10 @@
 - Django 1.3
 
 ### Installation
+
+0. If you don't have the Virtuoso triple store yet, install it
+
+    sudo apt-get install virtuoso-opensource-6.1
 
 1. Install Django
 
@@ -46,16 +55,21 @@
    This packages are in current Debian/Ubuntu distributions so you can
    install them using the package manager.
    
-    sudo apt-get install python-beautifulsoup python-mechanize php5-curl
+    sudo apt-get install python-beautifulsoup python-mechanize
 
-4. To doc
+4. Edit /etc/virtuoso-opensource-6.0/virtuoso.ini and add the settings.VIRTUOSO_WORK_DIR to the DirsAllowed variable, you can use the following command which will add the PROJECTPATH/data/ subdirectories to the virtuoso.ini DirsAllowed variable. 
 
-    sudo apt-get install virtuoso-opensource-6.1
+    reset.sh virtuoso-autoset-dir
+
+5. If using the php proxy for sparql queries (optional)
+
     sudo apt-get install php5-curl
+
 
 ### Database setup
 
-RDFAdmin uses a relational database to (TODO: specify why).
+RDFAdmin uses a relational database to save session data and indices. The default settings in local_settings.py 
+use a simple sqlite3 file. But you can use any database engine supported by Django (See Djando documentation).
 
 ### Apache configuration example (mod-python)
 
@@ -70,7 +84,7 @@ RDFAdmin uses a relational database to (TODO: specify why).
     </VirtualHost>
 
     
-### mod-wsgi
+### Apache configuration example with mod-wsgi using php proxy
 sudo apt-get install libapache2-mod-wsgi
 
 <VirtualHost *>
@@ -90,8 +104,3 @@ sudo apt-get install libapache2-mod-wsgi
 
 </VirtualHost>
 
-
-### Virtuoso
-sudo apt-get install virtuoso-opensource 
-
-Edit /etc/virtuoso-opensource-6.0/virtuoso.ini and add the settings.VIRTUOSO_WORK_DIR to the DirsAllowed variable
