@@ -1,15 +1,14 @@
 #!/bin/bash
-dbname=`cat local_settings.py | grep '#-DBNAME' | sed -re"s/^.+:[^']'([^']+)'.*$/\1/"`
-dbuser=`cat local_settings.py | grep '#-DBUSER' | sed -re"s/^.+:[^']'([^']+)'.*$/\1/"`
-dbpass=`cat local_settings.py | grep '#-DBPASS' | sed -re"s/^.+:[^']'([^']+)'.*$/\1/"`
-virtuoso_config=`cat local_settings.py | grep '#-VIRTUOSOINI' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-virtuoso_work=`cat local_settings.py | grep '#-VIRTUOSOWORK' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-schema_graph=`cat local_settings.py | grep '#-SCHEMAGRAPH' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-data_graph=`cat local_settings.py | grep '#-DATAGRAPH' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-virtuoso_host=`cat local_settings.py | grep '#-VIRTUOSOHOST' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-virtuoso_user=`cat local_settings.py | grep '#-VIRTUOSOUSER' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-virtuoso_pass=`cat local_settings.py | grep '#-VIRTUOSOPASS' | sed -re"s/^.+=[^']'([^']+)'.*$/\1/"`
-
+dbname=`python -c"from local_settings import *; print DATABASES['default']['NAME']"`
+dbuser=`python -c"from local_settings import *; print DATABASES['default']['USER']"`
+dbpass=`python -c"from local_settings import *; print DATABASES['default']['PASSWORD']"`
+virtuoso_config=`python -c"from local_settings import *; print VIRTUOSO_INI"`
+virtuoso_work=`python -c"from local_settings import *; print VIRTUOSO_WORK_DIR"`
+schema_graph=`python -c"from local_settings import *; print SCHEMA_GRAPH"`
+data_graph=`python -c"from local_settings import *; print DATA_GRAPH"`
+virtuoso_host=`python -c"from local_settings import *; print VIRTUOSO_HOST"`
+virtuoso_user=`python -c"from local_settings import *; print VIRTUOSO_USER"`
+virtuoso_pass=`python -c"from local_settings import *; print VIRTUOSO_PASS"`
 
 if [ $# -lt 1 ]; then
     echo "Available commands:"
@@ -32,7 +31,7 @@ else
         q6="FLUSH PRIVILEGES;"
 
         SQL="$q $q0 $q1 $q2 $q3 $q4 $q5 $q6"
-        #echo $SQL
+        echo $SQL
         
         mysql --user=root --password=$pass -e "$SQL" mysql
     fi

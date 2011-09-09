@@ -64,6 +64,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'base.startup.StartupMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,7 +99,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'base.context_processors.user',
 )
-try:
-    from local_settings import *
-except:
-    pass
+
+from local_settings import *

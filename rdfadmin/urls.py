@@ -1,15 +1,7 @@
 from django.conf.urls.defaults import *
-from piston.resource import Resource
-from rdfadmin.handlers import SavedQueryHandler, RecentQueryHandler
+from rdfadmin.handlers import saved_query_resource, recent_query_resource
 import views
 
-class CsrfExemptResource(Resource):
-    def __init__(self, handler, authentication = None):
-        super( CsrfExemptResource, self).__init__(handler, authentication)
-        self.csrf_exempt = getattr(self.handler, 'csrf_exempt', True)
-
-saved_query_resource = CsrfExemptResource(SavedQueryHandler)
-recent_query_resource = CsrfExemptResource(RecentQueryHandler)
 
 urlpatterns = patterns('',
     (r'^query/$', views.home),

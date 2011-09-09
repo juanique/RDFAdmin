@@ -1,7 +1,15 @@
 DATABASES = {
-    'default': {
+    'memory': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'data/cliprdf.sqlite3',                      # Or path to database file if using sqlite3.
+        'NAME': ':memory:',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'file': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'data/rdfadmin.sqlite3',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -9,10 +17,13 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = DATABASES['memory']
+
 #Triple store
 VIRTUOSO_HOST = "localhost"
 VIRTUOSO_USER = "dba"
 VIRTUOSO_PASS = ""
+VIRTUOSO_INI = "/etc/virtuoso-opensource-6.1/virtuoso.ini"
 VIRTUOSO_WORK_DIR = ""
 VIRTUOSO_ENDPOINT_PORT = 8890
 VIRTUOSO_ENDPOINT = "%s:%d/sparql" % (VIRTUOSO_HOST, VIRTUOSO_ENDPOINT_PORT)

@@ -68,7 +68,7 @@ function executeQuery() {
                             var value = row[f];
                             if(value.isUri()){
                                 var a = jQuery("<a>"+value+"</a>").appendTo(td);
-                                a.attr('href',explore_url+"?uri="+escape(value)+"&endpoint="+jQuery('#sparql_endpoint').val()+"&graph=&label=http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label");
+                                a.attr('href',explore_url+"?uri="+escape(value)+"&endpoint="+jQuery('#sparql_endpoint').val()+"&graph=&label=http%3A%2F%2Fwww.w3.org%2F2000%2F01%2F/df-schema%23label");
                             }else{
                                 td.html(str(value));
                             }
@@ -234,7 +234,7 @@ jQuery(document).ready(function(){
 
 function loadRecentQueries(){
     jQuery.ajax({
-        url : '/rdfadmin/RecentQuery/',
+        url : recent_queries_url,
         dataType : 'json',
         success : function(r){
             for(var i in r){
@@ -270,7 +270,7 @@ function loadGraphs(){
 
 function loadSavedQueries(){
     jQuery.ajax({
-        url : '/rdfadmin/SavedQuery/',
+        url : saved_queries_url,
         dataType : 'json',
         success : function(r){
             savedQueriesList.setOptions(r);

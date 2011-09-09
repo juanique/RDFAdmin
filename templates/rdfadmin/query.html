@@ -1,24 +1,26 @@
 {% extends "base.html" %}
+{% load media %}
 
 {% block title %}RDF Data Visualization{% endblock %}
 
 {% block head %}
-        <link rel='stylesheet' href='/media/css/Lib/jquery.jqplot.min.css'>
-        <link rel='stylesheet' href='/media/css/Lib/jquery.datatables.demo_table.css'>
-        <link rel='stylesheet' href='/media/css/Lib/jquery.datatables.demo_page.css'>
-        <link rel='stylesheet' href='/media/css/Lib/jquery.cluetip.css'>
-        <link rel='stylesheet' href='/media/css/Components/DropDownList.base.css'>
-        <link rel='stylesheet' href='/media/css/Components/MagicTextArea.base.css'>
-        <link rel='stylesheet' href='/media/css/Views/rdfadmin.query.css'>
+    {% media css:Lib/jquery.jqplot.min.css %}
+    {% media css:Lib/jquery.datatables.demo_table.css %}
+    {% media css:Lib/jquery.datatables.demo_page.css %}
+    {% media css:Lib/jquery.cluetip.css %}
+    {% media css:Components/DropDownList.base.css %}
+    {% media css:Components/MagicTextArea.base.css %}
+    {% media css:Views/rdfadmin.query.css %}
 
-        <script type="text/javascript">
-            var proxy_url = "{% url rdfadmin.views.proxy %}";
-            var explore_url = "{% url rdfadmin.views.explore %}";
-        </script>
+    <script type="text/javascript">
+        var proxy_url = "{% url rdfadmin.views.proxy %}";
+        var explore_url = "{% url rdfadmin.views.explore %}";
+        var recent_queries_url = "{% url rdfadmin.handlers.recent_query_resource%}"
+        var saved_queries_url = "{% url rdfadmin.handlers.saved_query_resource%}"
+    </script>
 {% endblock %}
 
 {% block header %}Query Sparql Endpoint {% endblock %}
-
 
 {% block content %}
     <div id="mainWrap">
@@ -58,7 +60,7 @@
             <div id='messages'>
             </div>
             <div id="imgDiv" style="display: none;">
-                <img src="/media/img/Views/rdfadmin.loader.gif">
+                {% media img:Views/rdfadmin.loader.gif %}
             </div>
             <script id='tableTemplate' type='text/x-jquery-tmpl'>
                 <table class='display'>
@@ -74,17 +76,17 @@
     </div>
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="/media/js/Lib/jquery-fieldselection.pack.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/jqplot.plugins/jqplot.pieRenderer.min.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/jquery.cluetip.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/jquery.color.js"></script>
-    <script type="text/javascript" src="/media/js/Lib/oop.js"></script>
-    <script type="text/javascript" src="/media/js/Components/Notifier.js"></script>
-    <script type="text/javascript" src="/media/js/Components/MagicTextarea.js"></script>
-    <script type="text/javascript" src="/media/js/Components/DropDownList.js"></script>
-    <script type="text/javascript" src="/media/js/Rdf/rdf.js"></script>
-    <script type="text/javascript" src='/media/js/Views/rdfadmin.query.js'></script>
+    {% media js:Lib/jquery-fieldselection.pack.js %}
+    {% media js:Lib/jquery.jqplot.min.js %}
+    {% media js:Lib/jqplot.plugins/jqplot.pieRenderer.min.js %}
+    {% media js:Lib/jquery.dataTables.min.js %}
+    {% media js:Lib/jquery.cluetip.js %}
+    {% media js:Lib/jquery.color.js %}
+    {% media js:Lib/oop.js %}
+    {% media js:Components/Notifier.js %}
+    {% media js:Components/MagicTextarea.js %}
+    {% media js:Components/DropDownList.js %}
+    {% media js:Rdf/rdf.js %}
+    {% media js:Views/rdfadmin.query.js %}
 
 {% endblock %}

@@ -5,7 +5,7 @@ class SavedQuery(models.Model):
     name = models.CharField(max_length = 200)
     endpoint = models.CharField(max_length = 200, blank = True)
     query = models.TextField()
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, null = True, blank = True)
 
     def __str__(self):
         return self.name
