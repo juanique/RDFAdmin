@@ -17,6 +17,7 @@ DATABASES = {
     }
 }
 
+#Default db in memory
 DATABASES['default'] = DATABASES['memory']
 
 #Triple store
