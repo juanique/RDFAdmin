@@ -14,7 +14,7 @@
    according to your local config. In particular, make sure to set your 
    Virtuoso access variables.
 
-4. Create the support DB
+3.3 If using a DB diferent that the default in memory sqlite3, make sure to create the app tables
     
     python manage.py syncdb
 
