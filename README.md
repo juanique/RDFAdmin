@@ -1,6 +1,25 @@
 
 # RDFAdmin
 
+## Ubuntu quickstart
+
+1.  It will install Django 1.3, Django-pistons 0.2.2, as well as mechanize, beautifulsoup and setuptools using apt-get.
+
+    #Clone the git repo
+    git clone https://github.com/juanique99/RDFAdmin.git RDFAdmin
+    cd RDFAdmin
+
+    #Install dependencies
+    ./dependencies.sh
+
+    #Create local settings, edit the file as necessary.
+    cp local_settings.py.example local_settings.py
+
+    #Run the server
+    python manage.py runserver
+
+2. Open http://localhost:8000/ on your web browser.
+
 ## Getting started
 
 1. You may need to install Python 2.6, Django and other Python
