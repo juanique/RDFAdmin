@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 )
 
 
+#in production use apache or something to serve media
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
