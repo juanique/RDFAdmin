@@ -51,6 +51,12 @@ class ResultRow:
 
     def __getitem__(self,item):
         return self.values[item]
+
+    def get(self, item, default):
+        try:
+            return self[item]
+        except KeyError:
+            return default
     
 
 class ResultSet:
