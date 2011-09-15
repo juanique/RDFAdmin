@@ -69,6 +69,15 @@ class ResultSet:
     def can_read(self):
         return self.current_row < self.total_rows
 
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if not self.can_read():
+            raise StopIteration
+        else:
+            return self.get_row()
+
 
 class SparqlProxy:
 
