@@ -41,6 +41,39 @@
 
     python manage.py runserver
 
+## Using apache2
+
+0. You will need to install apache2 mod wsgi library
+
+    sudo apt-get install libapache2-mod-wsgi
+
+1. Update your apache configuration (in ubuntu /etc/apache2/sites-enabled/default).
+Change the appropiate path for the djang.wsgi file at the root of the project.
+
+    <VirtualHost *>
+        WSGIScriptAlias / /home/user/RDFAdmin/django.wsgi
+
+        <Directory /home/user/RDFAdmin>
+            Order allow,deny
+            allow from all
+        </Directory>
+    </VirtualHost>
+
+
+2. Setup your support database. It is not recomended to use the default in-memory database
+When using apache. A simple example for the local settings using sqlite3 would be
+
+    DATABASES = {
+        'file': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/tmp/rdfadmin.sqlite3', #Make sure apache can read/write to this file
+        }
+    }
+
+3. Create database tables.
+
+    python manage.py syncdb
+
 ## System requirements
 
 - Python 2.6
@@ -89,37 +122,4 @@
 
 RDFAdmin uses a relational database to save session data and indices. The default settings in local_settings.py 
 use a simple sqlite3 file. But you can use any database engine supported by Django (See Djando documentation).
-
-### Apache configuration example (mod-python)
-
-    <VirtualHost *>
-        ServerName www.rdfclip.com
-
-        SetHandler python-program
-        PythonHandler django.core.handlers.modpython
-        SetEnv DJANGO_SETTINGS_MODULE settings
-        SetEnv DJANGO_SERVER_TYPE apache
-        PythonPath "['/home/rdfclip','/home/rdfclip_git'] + sys.path"
-    </VirtualHost>
-
-    
-### Apache configuration example with mod-wsgi using php proxy
-sudo apt-get install libapache2-mod-wsgi
-
-<VirtualHost *>
-    ServerName www.rdfclip.com
-    WSGIScriptAlias / /home/user/RDFAdmin/django.wsgi
-
-    <Directory /home/user/RDFclip>
-		Order allow,deny
-		allow from all
-    </Directory>
-
-    Alias /sparqlproxy/ "/home/user/RDFAdmin/proxy/"
-    <Directory "/home/user/RDFAdmin/proxy/">
-        Order deny,allow
-        Allow from all
-    </Directory>
-
-</VirtualHost>
 
