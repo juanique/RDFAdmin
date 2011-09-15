@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#read config from local settings
 dbname=`python -c"from local_settings import *; print DATABASES['default']['NAME']"`
 dbuser=`python -c"from local_settings import *; print DATABASES['default']['USER']"`
 dbpass=`python -c"from local_settings import *; print DATABASES['default']['PASSWORD']"`
