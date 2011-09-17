@@ -137,6 +137,7 @@ function loadUri(uri){
 
     jQuery("#searchResultsTable").hide();
     jQuery("#imgDiv").show();
+    //jQuery("#resourceContainer").attr("about",uri);
     hideFeedback();
 
     graph = jQuery("#inputGraph").val();
@@ -170,7 +171,7 @@ function loadUri(uri){
                     RDF.state(row.p, $_RDFS('range'), row.range);
                     var templateData = {};
                     templateData.propertyName = formatResource(row,'p','pl');
-                    templateData.propertyValue = formatResource(row,'o','ol','p');
+                    templateData.propertyValue = formatResource(row,'o','ol','p', true);
                     var jRow = jQuery('#propertiesTemplate').tmpl(templateData);
                     jRow.find("td").dblclick(function(){
                         triplesRemoved.push(RDF.Triple(getCurrentUri(), row.p, row.o, row.o.dataType));
@@ -209,14 +210,24 @@ function getParams(uri){
     });
 }
 
-function formatResource(row, res, resLabel, prop){
+function formatResource(row, res, resLabel, prop, rdfa){
     var userLabel = row[res].value;
     if(prop != undefined){
-        prop = RDF.property(row[prop].value);
-        userLabel = prop.userFormat(userLabel);
+        property = RDF.property(row[prop].value);
+        userLabel = property.userFormat(userLabel);
     }
+    rdfa = rdfa || false;
+
     var params = getParams(row[res].value);
     var tag = row[res].isUri()? "A title='"+row[res]+"' href='"+base_url+"?"+params+"'":"SPAN";
+    if(rdfa){
+        tag += " about='"+getCurrentUri()+"' ";
+        if(row[res].isUri()){
+            tag += " rel='"+row[prop]+"' ";
+        }else{
+            tag += " property='"+row[prop]+"' ";
+        }
+    }
 
     var label = (typeof(row[resLabel]) == "undefined")? userLabel:str(row[resLabel]);
     return "<"+tag+">"+label+"</"+tag+">";

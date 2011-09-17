@@ -15,6 +15,14 @@ RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 CLIP = Namespace('http://www.rdfclip.com/resource/')
 CLIPS = Namespace('http://www.rdfclip.com/schema#')
 
+registered_namespaces = {
+        'file': FILE,
+        'rdfs' : RDFS, 
+        'rdf' : RDF,
+        'clip' : CLIP,
+        'clips' : CLIPS,
+        }
+
 hachoir_mapping = {
     'description' : RDFS['comment'],
     'duration' : FILE['duration'],
@@ -30,6 +38,13 @@ hachoir_mapping = {
     #Classes by  mimetype
     'video/x-msvideo' : FILE['Video'],
 }
+
+def abbreviate(uri):
+    for prefix, ns in registered_namespaces.items():
+        ns_name = ns.encode()
+        if uri[:len(ns_name)] == ns_name:
+            return "%s:%s" % (prefix, uri[len(ns_name):])
+    raise Exception("Tried to abbreviate an URI from an unregistered namespace.")
 
 class ResultValue:
 
@@ -51,6 +66,12 @@ class ResultRow:
 
     def __getitem__(self,item):
         return self.values[item]
+
+    def get(self, item, default):
+        try:
+            return self[item]
+        except KeyError:
+            return default
     
 
 class ResultSet:
@@ -68,6 +89,15 @@ class ResultSet:
 
     def can_read(self):
         return self.current_row < self.total_rows
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if not self.can_read():
+            raise StopIteration
+        else:
+            return self.get_row()
 
 
 class SparqlProxy:

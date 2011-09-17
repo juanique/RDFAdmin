@@ -1,7 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 {% load media %}
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" version="XHTML+RDFa 1.0" 
+    xmnlns:clip='http://www.rdfclip.com/resource/'
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    >
+
+    <meta property="dc:creator" content="Juan Enrique Munoz" />
+
     <head>
         <title>{% block title %}RDF Clip {% endblock %} - {{user}}</title>
         {% media css:style.css %}
