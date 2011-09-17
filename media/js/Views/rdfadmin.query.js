@@ -20,6 +20,7 @@ function showChart(){
 }
 
 function getProxy(){
+    return new RDF.AjaxEndpointConnection(jQuery('#sparql_endpoint').val());
     return new RDF.SparqlProxy(proxy_url, jQuery('#sparql_endpoint').val());
 }
 
@@ -42,7 +43,6 @@ function executeQuery() {
         req.abort();
 
     req = proxy.query({
-                format : "json",
                 query : query,
                 context : "userInput",
                 callback : function(response){
@@ -125,7 +125,6 @@ jQuery(document).ready(function(){
         trigger : '@',
         refreshList : function(word, list){
             getProxy().query({
-                format : 'json',
                 query  : 'SELECT ?resource, ?label WHERE {?resource <http://www.w3.org/2000/01/rdf-schema#label> ?label FILTER regex(?label, "^'+word.substring(1)+'","i") } GROUP BY ?resource LIMIT 10',
                 callback : function(r){
                     if(r.results.bindings){
@@ -250,7 +249,6 @@ function loadRecentQueries(){
 function loadGraphs(){
     jQuery('#graphs_list').html('Loading...');
     getProxy().query({
-        format : 'json',
         query  : 'SELECT ?g WHERE { GRAPH ?g { ?s ?p ?o } } GROUP BY ?g',
         callback : function(r){
             var graphs = [];
