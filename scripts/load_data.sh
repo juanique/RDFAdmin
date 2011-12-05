@@ -12,11 +12,15 @@
 host="localhost"
 user="dba"
 
+hash realpath 2>&- || { echo >&2 "This script requires realpath.
+Use 'apt-get install realpath' if using ubuntu.  Aborting."; exit 1; }
+
 while getopts d:f:g:chr opcion
 do
         case $opcion in
                 d) 	
             read -s -p "Enter password for user $user@$host: " pass
+            echo ""
 			directorio=$OPTARG
 			if [ ${directorio:(-1)} = "/" ]; then
 				directorio=${directorio:0:(${#directorio}-1)}
@@ -26,6 +30,7 @@ do
 
                 f)
             read -s -p "Enter password for user $user@$host: " pass
+            echo ""
 			files=$OPTARG
 			for i in $files
 			do
@@ -56,6 +61,7 @@ do
 
                 c)
             read -s -p "Enter password for user $user@$host: " pass
+            echo ""
 			flag_c="OK"
 		;;
 
@@ -85,23 +91,24 @@ function carga_datos (){
 
 	for file in $1/*
 	do
+        filepath=`realpath $file`
 		if [ "ttl" = "${file##*.}" ]; then
             echo "DB.DBA.TTLP_MT( file_to_string_output('__FILE__'), '', '__GRAPH__', 1 );" > load_data.sql
-			cat load_data.sql | sed -e"s\\__FILE__\\$file\\" | sed -e"s\\__GRAPH__\\$grafo\\" > temp.sql
+			cat load_data.sql | sed -e"s\\__FILE__\\$filepath\\" | sed -e"s\\__GRAPH__\\$grafo\\" > temp.sql
 			isql-vt $host $user $pass temp.sql
 			echo "Hecho para $file"
             rm -rf load_data.sql
 		fi
 		if [ "rdf" = "${file##*.}" ]; then
             echo "DB.DBA.RDF_LOAD_RDFXML_MT( file_to_string_output('__FILE__'), '', '__GRAPH__', 1 );" > load_data.sql
-			cat load_data.sql | sed -e"s\\__FILE__\\$file\\" | sed -e"s\\__GRAPH__\\$grafo\\" > temp.sql
+			cat load_data.sql | sed -e"s\\__FILE__\\$filepath\\" | sed -e"s\\__GRAPH__\\$grafo\\" > temp.sql
 			isql-vt $host $user $pass temp.sql
 			echo "Hecho para $file"
             rm -rf load_data.sql
 		fi
 		if [ "X$flag_r" = "XOK" ]; then
 			if [ -d $file ]; then
-				carga_datos $file
+				carga_datos $filepath
 			fi
 		fi
 	done
@@ -180,7 +187,7 @@ fi
 if [ "X$flag_d" = "XOK" ]; then
 	if [ "X$flag_g" = "XOK" ]; then
 		#Existe grafo
-		carga_datos $directorio
+		carga_datos `realpath $directorio`
 	else
 		echo "Error, falta nombre del grafo"
 		exit 1
