@@ -11,14 +11,12 @@
 
 host="localhost"
 user="dba"
-pass="abdhgdbf"
-
-
 
 while getopts d:f:g:chr opcion
 do
         case $opcion in
                 d) 	
+            read -s -p "Enter password for user $user@$host: " pass
 			directorio=$OPTARG
 			if [ ${directorio:(-1)} = "/" ]; then
 				directorio=${directorio:0:(${#directorio}-1)}
@@ -27,6 +25,7 @@ do
                 ;;
 
                 f)
+            read -s -p "Enter password for user $user@$host: " pass
 			files=$OPTARG
 			for i in $files
 			do
@@ -56,6 +55,7 @@ do
 
 
                 c)
+            read -s -p "Enter password for user $user@$host: " pass
 			flag_c="OK"
 		;;
 
@@ -67,7 +67,7 @@ do
 			echo "-c		Clean all RDF database. If -g option was especificated, Clean just indicated graph"
 			echo "-h		This help page"
 			echo "-r		Recursive mode, load all .ttl files in subdirectories too"
-			echo "-d dir		Load all .ttl files in \"dir\" directory"
+			echo "-d dir		Load all .ttl and .rdf files in \"dir\" directory"
 			echo "-f \"file1 ..\"	Load files you specified between \"\". Must be complete path"
 			echo "-g graph	Graph where you want load the files in RDF database. This option must be especificated to load files (options -f or -d)"
 			echo
@@ -113,7 +113,7 @@ if [ "X$flag_c" = "XOK" ]; then
 	if [ "X$flag_g" = "XOK" ]; then
 		#Existe grafo
 		#Validación de la acción de borrar
-		echo -n "¿Está seguro de borrar el grafo $grafo? (y/n): "
+		echo -n "This action will delete all data from $grafo. It CANNOT be undone. Are you sure? (y/n): "
 		read -s -n 1 respuesta
 		if [ $respuesta = 'n' ]; then
 			echo "$respuesta"
@@ -121,32 +121,15 @@ if [ "X$flag_c" = "XOK" ]; then
 			echo "Abortado"
 			echo
 		elif [ $respuesta = 'y' ]; then
-			echo "$respuesta"
-			echo
-			echo -n "¿Está seguro de borrar el grafo $grafo? Esta acción no se puede revertir (y/n): "
-			read -s -n 1 respuesta
-			if [ $respuesta = 'n' ]; then
-				echo "$respuesta"
-				echo
-				echo "Abortado"
-				echo
-			elif [ $respuesta = 'y' ]; then
-				echo "$respuesta"
-				echo
-				echo "Borrando grafo"
-				echo "sparql CLEAR GRAPH <$grafo>;" > temp.sql
-				echo
-				isql-vt $host $user $pass temp.sql
-				rm -rf temp.sql
-			else 
-				echo "$respuesta"
-				echo
-				echo "Respuesta incorrecta debe introducir \"y\" o \"n\""
-				echo
-			fi
+            echo "$respuesta"
+            echo
+            echo "Deleting data from graph $grafo"
+            echo "sparql CLEAR GRAPH <$grafo>;" > temp.sql
+            echo
+            isql-vt $host $user $pass temp.sql
 		else
 			echo
-			echo "Respuesta incorrecta debe introducir \"y\" o \"n\""
+			echo "Please enter \"y\" or \"n\""
 			echo
 		fi
 	else

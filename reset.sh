@@ -33,7 +33,7 @@ else
         q6="FLUSH PRIVILEGES;"
 
         SQL="$q $q0 $q1 $q2 $q3 $q4 $q5 $q6"
-        echo $SQL
+        echo "$SQL"
         
         mysql --user=root --password=$pass -e "$SQL" mysql
     fi
